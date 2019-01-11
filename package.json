@@ -1,0 +1,26 @@
+{
+  "name": "react-hooks-event-subscriber",
+  "version": "1.0.0",
+  "description": "Easily subscribe to events in React Hooks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sampathsris/react-hooks-event-subscriber.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "events",
+    "subscribe",
+    "window"
+  ],
+  "author": "Sampath Sitinamaluwa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sampathsris/react-hooks-event-subscriber/issues"
+  },
+  "homepage": "https://github.com/sampathsris/react-hooks-event-subscriber#readme"
+}
