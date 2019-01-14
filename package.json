@@ -4,9 +4,9 @@
   "description": "Easily subscribe to events in React Hooks.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
+    "test": "echo \"No tests defined\" && exit 1 ",
     "build": "node ./node_modules/babel-cli/bin/babel.js src --out-dir lib",
-    "prepublish": "npm test && npm run build"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,19 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-preset-es2015": "^6.24.1"
+    "babel-preset-es2015": "^6.24.1",
+    "sinon": "^7.2.2",
+    "xo": "^0.23.0"
   },
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
+  },
+  "xo": {
+    "semicolon": false,
+    "globals": [
+      "window"
+    ]
   }
 }

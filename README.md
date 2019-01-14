@@ -6,7 +6,7 @@ Easily subscribe to events in React Hooks.
 
 Consider the following code:
 
-```js
+```jsx
 import React, { useEffect } from 'react'
 
 const handleClick = e => {
@@ -19,7 +19,7 @@ const handleEscapeKey = e => {
     }
 }
 
-function MyComponent() {
+const MyComponent = () => {
     useEffect(() => {
         // Let's subscribe to couple of events
         window.addEventListener('click', handleClick)
@@ -31,7 +31,9 @@ function MyComponent() {
         }
     })
 
-    return ( /* ... */ )
+    return (
+        <>{/* ... */}</>
+    )
 }
 ```
 
@@ -39,20 +41,37 @@ But, when the number of listeners go up, this becomes very hard to maintain. It 
 
 Instead you can do:
 
-```js
+```jsx
 import React, { useEffect } from 'react'
 import { hookAllWindowListeners } from 'react-hooks-event-subscribe'
 
-// let handleClick and handleEscapeKey be same as above
+// Let handleClick and handleEscapeKey be same as above
 
-function MyComponent() {
+const MyComponent = () => {
     useEffect(hookAllWindowListeners({
         click: handleClick,
         keydown: handleEscapeKey,
     }))
     
-    return ( /* ... */ )
+    return (
+        <>{/* ... */}</>
+    )
 }
+```
+
+But really, you don't need to use this library exclusively with react. If you want to
+handle subscribing and unsubscribing to events with vanilla JS in a control manner, you
+could do something like this:
+
+```js
+// Add event handlers on multiple events
+const cleanupEventListeners = hookAllWindowListeners({
+    click: handleClick,
+    keydown: handleEscapeKey,
+})
+
+// ... Optionally, much later in the code, you can clean up
+cleanupEventListeners()
 ```
 
 ## API

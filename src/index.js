@@ -1,30 +1,73 @@
 
+const warn = () => console.log(
+	`You may be using react-hooks-event-subscriber in a non browser environment. Calls to hookWindowListener and hookAllWindowListeners will not work.`
+)
+
+const window = global.window || {
+	addEventListener: warn,
+	removeEventListener: warn
+}
+
 /**
  * Returns a function that could be passed to the `useEffect` hook and handles
  * subscribing and unsubscribing.
+ *
+ * @param {EventTarget} target - Target to subscribe.
+ * @param {string} eventName - Event to subscribe.
+ * @param {(EventListener|function)} eventHandler - Event handler.
+ * @returns {function} A function that may be used inside react `useEffect`.
  */
-export function hookListener (target, eventName, eventHandler) {
+export const hookListener = (target, eventName, eventHandler) => () => {
+	target.addEventListener(eventName, eventHandler)
 
+	return () => {
+		target.removeEventListener(eventName, eventHandler)
+	}
 }
 
 /**
- * A shorthand version of `hookListener` to subscribe to events emitted by `window`.
+ * Returns a function that could be passed to the `useEffect` hook and handles
+ * subscribing and unsubscribing from global `window` object.
+ *
+ * @param {string} eventName - Event to subscribe.
+ * @param {(EventListener|function)} eventHandler - Event handler.
+ * @returns {function} A function that may be used inside react `useEffect`.
  */
-export function hookWindowListener(eventName, eventHandler) {
+export const hookWindowListener = (eventName, eventHandler) => hookListener(window, eventName, eventHandler)
 
+/**
+ * Returns a function that could be passed to the `useEffect` hook and handles
+ * subscribing and unsubscribing multiple event names and listeners as
+ * key-value pairs in an object.
+ *
+ * @param {EventTarget} target - Target to subscribe.
+ * @param {object} listenerMap - Object mapping event names to listeners as key-value pairs.
+ * @returns {function} A function that may be used inside react `useEffect`.
+ */
+export const hookAllListeners = (target, listenerMap) => () => {
+	const eventNames = listenerMap ?
+		Object.keys(listenerMap).filter(prop => Object.prototype.hasOwnProperty.call(listenerMap, prop)) :
+		[]
+
+	// eslint-disable-next-line guard-for-in
+	for (const eventName in eventNames) { //
+		target.addEventListener(eventName, listenerMap[eventName])
+	}
+
+	return () => {
+		// eslint-disable-next-line guard-for-in
+		for (const eventName in eventNames) {
+			target.removeEventListener(eventName, listenerMap[eventName])
+		}
+	}
 }
 
 /**
- * Like `hookListener`, but allows you to subscribe to multiple events by specifying
- * event names and listeners as key-value pairs in an object literal.
+ * Returns a function that could be passed to the `useEffect` hook and handles
+ * subscribing and unsubscribing to global `window` object. Multiple event names
+ *  and listeners can be specified as key-value pairs in an object.
+ *
+ * @param {object} listenerMap - Object mapping event names to listeners as key-value pairs.
+ * @returns {function} A function that may be used inside react `useEffect`.
  */
-export function hookAllListeners(target, listenerMap) {
-
-}
-
-/**
- * A shorthand to subscribe to multiple events emitted by `window`.
- */
-export function hookAllWindowListeners(listenerMap) {
-
-}
+export const hookAllWindowListeners = listenerMap => hookAllListeners(window, listenerMap)
